@@ -260,6 +260,21 @@ describe("base class tests", () => {
     expect((log as any).stack).toBe(e.stack);
   });
 
+  it("should handle logging any serializable object", async () => {
+    // Fixtures
+    const object = { hello: "world", question: null, answer: 42 };
+    const base = new Base("testing");
+
+    // Add a mock sync method
+    base.setSync(async log => log);
+
+    // Log
+    const log = await base.error(object);
+
+    // The log message should contain JSON representation
+    expect(log.message).toBe('{"hello":"world","question":null,"answer":42}');
+  });
+
   it("should not ignore exceptions if `ignoreExceptions` opt == false and `throwExceptions` opt == true", async () => {
     // Fixtures
     const message = "Testing exceptions";

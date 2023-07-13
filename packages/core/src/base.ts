@@ -178,7 +178,7 @@ class Logtail {
    * @returns Promise<ILogtailLog> after syncing
    */
   public async log<TContext extends Context>(
-    message: Message,
+    message: Message | any,
     level: ILogLevel = LogLevel.Info,
     context: TContext = {} as TContext
   ): Promise<ILogtailLog & TContext> {
@@ -222,7 +222,7 @@ class Logtail {
         ...log,
 
         // Add string message
-        message
+        message: typeof message === 'string' ? message : JSON.stringify(message)
       };
     }
 
@@ -270,7 +270,7 @@ class Logtail {
    * @returns Promise<ILogtailLog> after syncing
    */
   public async debug<TContext extends Context>(
-    message: Message,
+    message: Message | any,
     context: TContext = {} as TContext
   ) {
     return this.log(message, LogLevel.Debug, context);
@@ -285,7 +285,7 @@ class Logtail {
    * @returns Promise<ILogtailLog> after syncing
    */
   public async info<TContext extends Context>(
-    message: Message,
+    message: Message | any,
     context: TContext = {} as TContext
   ) {
     return this.log(message, LogLevel.Info, context);
@@ -300,7 +300,7 @@ class Logtail {
    * @returns Promise<ILogtailLog> after syncing
    */
   public async warn<TContext extends Context>(
-    message: Message,
+    message: Message | any,
     context: TContext = {} as TContext
   ) {
     return this.log(message, LogLevel.Warn, context);
@@ -315,7 +315,7 @@ class Logtail {
    * @returns Promise<ILogtailLog> after syncing
    */
   public async error<TContext extends Context>(
-    message: Message,
+    message: Message | any,
     context: TContext = {} as TContext
   ) {
     return this.log(message, LogLevel.Error, context);
