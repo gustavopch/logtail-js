@@ -275,6 +275,22 @@ describe("base class tests", () => {
     expect(log.message).toBe('{"hello":"world","question":null,"answer":42}');
   });
 
+  it("should not fail on logging non-serializable object", async () => {
+    // Fixtures
+    const object = { object: {} };
+    object.object = object;
+    const base = new Base("testing");
+
+    // Add a mock sync method
+    base.setSync(async log => log);
+
+    // Log
+    const log = await base.error(object);
+
+    // The log message should contain JSON serialization error message
+    expect(log.message).toBe('[ Logged object could not be serialized: Converting circular structure to JSON ]');
+  });
+
   it("should not ignore exceptions if `ignoreExceptions` opt == false and `throwExceptions` opt == true", async () => {
     // Fixtures
     const message = "Testing exceptions";

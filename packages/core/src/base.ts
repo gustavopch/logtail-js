@@ -217,12 +217,19 @@ class Logtail {
         message: message.message
       };
     } else {
+      let stringMessage;
+      try {
+        stringMessage = typeof message === 'string' ? message : JSON.stringify(message);
+      } catch (e) {
+        stringMessage = `[ Logged object could not be serialized: ${e.message.split("\n")[0]} ]`
+      }
+
       log = {
         // Add stub
         ...log,
 
         // Add string message
-        message: typeof message === 'string' ? message : JSON.stringify(message)
+        message: stringMessage
       };
     }
 
